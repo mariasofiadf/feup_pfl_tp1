@@ -6,4 +6,4 @@ fibRec n = fibRec(n-1) + fibRec(n-2)
 
 --1.2
 fibLista:: [Integer]
-fibLista = 0 : 1 : zipWith (+) fibLista (tail fibLista)
+fibLista = [0,1] ++ zipWith (+) fibLista (tail fibLista)
