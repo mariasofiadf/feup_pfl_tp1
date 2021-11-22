@@ -1,4 +1,6 @@
 import Data.Char (digitToInt, intToDigit)
+import Test.QuickCheck (Result(output))
+import Data.Graph.Inductive (out)
 
 data BigNumber = BigNumber Sign [Int] deriving Show
 
@@ -21,3 +23,9 @@ getDigits (x:[])    | x `elem` ['0','1','2','3','4','5','6','7','8','9'] = [digi
                     | otherwise = error ("Invalid Input")
 getDigits (x:xs) = getDigits [x] ++ getDigits xs
 
+--2.3 
+
+outputBN :: (Show a) => [a] -> String
+outputBN [] = ""
+outputBN [x] = (show x)
+outputBN (x:xs) = (show x) ++ outputBN xs
