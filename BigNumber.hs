@@ -29,3 +29,9 @@ outputBN :: (Show a) => [a] -> String
 outputBN [] = ""
 outputBN [x] = (show x)
 outputBN (x:xs) = (show x) ++ outputBN xs
+
+
+--Soma
+
+--somaBN :: BigNumber -> BigNumber
+--somaBN bn = BigNumber Pos []
