@@ -1,3 +1,4 @@
+module BigNumber (BigNumber(..), Sign(..), scanner, output, somaBN, subBN) where
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char
 import Text.Html (yellow)
