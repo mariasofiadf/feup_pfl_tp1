@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char
+import Text.Html (yellow)
 
 data BigNumber = BigNumber Sign [Int] deriving Show
 
@@ -90,3 +91,21 @@ subBN :: BigNumber -> BigNumber -> BigNumber
 subBN bg (BigNumber sign list)  | sign == Neg = somaBN bg (BigNumber Pos list)
                                 | otherwise = somaBN bg (BigNumber Neg list)
 
+
+-- param: list value overflow -> list
+-- value < 10
+multLA:: [Int] -> Int -> Int -> [Int]
+multLA [] y ov = [ov]
+multLA (x:xs) y ov = (mul+ov) `mod` 10 : multLA xs y ((mul + ov) `div` 10)
+                where mul = x * y
+
+--list multiplication
+mulList:: [Int] -> [Int] -> [Int]
+mulList xs [0] = []
+mulList xs [] = []
+mulList xs (y:ys) = sumLists (multLA xs y 0) (0: mulList xs ys)
+
+mulBN:: BigNumber -> BigNumber -> BigNumber
+mulBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  BigNumber sign (reverse (mulList (reverse list1) (reverse list2)))
+                                                        where sign | sign1 == sign2 = Pos
+                                                                   |otherwise = Neg
