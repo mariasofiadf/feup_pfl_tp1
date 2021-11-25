@@ -1,5 +1,6 @@
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char
+import Text.Html (yellow)
 
 data BigNumber = BigNumber Sign [Int] deriving Show
 
@@ -9,6 +10,7 @@ data Sign = Pos | Neg deriving (Show,Eq)
 
 scanner:: String -> BigNumber
 scanner "" = error"Invalid input in function scanner"
+scanner ['0'] = BigNumber (charToSign '0') (stringToList "0")
 scanner ('0':xs) = scanner xs
 scanner (x:xs) = BigNumber (charToSign x) (stringToList (x:xs))
 
@@ -58,12 +60,12 @@ sumLists (x:xs) (y:ys)  | sum >= 10 && (length xs > length ys) = sum`mod`10 : su
 
 --igual
 biggerAbsList:: [Int] -> [Int] -> Bool
-biggerAbsList [][] = False  
+biggerAbsList [][] = False
 biggerAbsList (x:xs) (y:ys) | length (x:xs) > length (y:ys) = True
                             | length (x:xs)  < length (y:ys) = False
-                            | otherwise = if x /= y then x > y 
+                            | otherwise = if x /= y then x > y
                                         else biggerAbsList xs ys
- 
+
 somaBN :: BigNumber -> BigNumber -> BigNumber
 somaBN (BigNumber Pos list1) (BigNumber Pos list2) = BigNumber Pos (reverse (sumLists (reverse list1) (reverse list2)))
 somaBN (BigNumber Neg list1) (BigNumber Neg list2) = BigNumber Neg (reverse (sumLists (reverse list1) (reverse list2)))
@@ -90,3 +92,23 @@ subBN :: BigNumber -> BigNumber -> BigNumber
 subBN bg (BigNumber sign list)  | sign == Neg = somaBN bg (BigNumber Pos list)
                                 | otherwise = somaBN bg (BigNumber Neg list)
 
+
+-- param: list value overflow -> list
+-- value < 10
+multLA:: [Int] -> Int -> Int -> [Int]
+multLA [] y ov = [ov]
+multLA (x:xs) y ov = (mul+ov) `mod` 10 : multLA xs y ((mul + ov) `div` 10)
+                where mul = x * y
+
+--list multiplication
+mulList:: [Int] -> [Int] -> [Int]
+mulList xs [0] = [0]
+mulList [0] ys = [0]
+mulList xs [] = []
+mulList [] ys = []
+mulList xs (y:ys) = sumLists (multLA xs y 0) (0: mulList xs ys)
+
+mulBN:: BigNumber -> BigNumber -> BigNumber
+mulBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  BigNumber sign (reverse (mulList (reverse list1) (reverse list2)))
+                                                        where sign | sign1 == sign2 = Pos
+                                                                   |otherwise = Neg
