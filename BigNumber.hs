@@ -7,20 +7,20 @@ data BigNumber = BigNumber Sign [Int] deriving (Show,Eq)
 
 data Sign = Pos | Neg deriving (Show,Eq)
 
-
+--Transforma uma string em BigNumber utilizando as funções auxiliares charToSign e stringToList
 scanner:: String -> BigNumber
 scanner "" = error"Invalid input in function scanner"
 scanner ['0'] = BigNumber (charToSign '0') (stringToList "0")
 scanner ('0':xs) = scanner xs
 scanner (x:xs) = BigNumber (charToSign x) (stringToList (x:xs))
 
---usada no scanner
+--Usada no scanner. Transforma um char em Sign
 charToSign :: Char -> Sign
 charToSign s    | s == '-' = Neg
                 | isDigit s  = Pos
                 | otherwise = error"Invalid input in function charToSign"
 
---usada no scanner
+--Usada no scanner. Transforma string de dígitos, com ou sem sinal, numa lista de inteiros (menores que 10)
 stringToList :: String -> [Int]
 stringToList "" = []
 stringToList [x]    | isDigit x = [digitToInt x]
@@ -28,19 +28,22 @@ stringToList [x]    | isDigit x = [digitToInt x]
                     | otherwise = error"Invalid Input in function stringToList"
 stringToList (x:xs) =  stringToList [x] ++ stringToList xs
 
-
+--Transforma um BigNumber numa String. Para isso chama as funções signToString e listToString e concatena os seus resultados.
 output :: BigNumber -> String
 output (BigNumber _ [0]) = "0"
 output (BigNumber sign list) = signToString sign ++ listToString list
 
+--Transforma Sign em String
 signToString :: Sign -> String
 signToString s  | s == Pos = ""
                 | s == Neg = "-"
                 | otherwise = error"signToString error";
 
+--Transforma lista de dígitos numa String de dígitos
 listToString :: [Int] -> String
 listToString = foldr (\ x -> (++) [intToDigit x]) ""
 
+--Calcula a soma de duas listas que representam números inteiros não negativos.
 sumLists :: [Int] -> [Int] -> [Int]
 sumLists [] [] = []
 sumLists [x] [] | x < 10 = [x]
@@ -57,7 +60,7 @@ sumLists (x:xs) (y:ys)  | sum >= 10 && (length xs > length ys) = sum`mod`10 : su
                         | otherwise = sum : sumLists xs ys
                         where sum = x + y
 
---igual
+--As listas representa números inteiros não negativos e a função verifica se o primeiro número é maior que o segundo
 biggerAbsList:: [Int] -> [Int] -> Bool
 biggerAbsList [][] = False
 biggerAbsList [] _ = False
@@ -67,6 +70,7 @@ biggerAbsList (x:xs) (y:ys) | length (x:xs) > length (y:ys) = True
                             | otherwise = if x /= y then x > y
                                         else biggerAbsList xs ys
 
+--Soma dois BigNumber e chama sumLists ou subLists dependendo dos sinais dos BigNumbers.
 somaBN :: BigNumber -> BigNumber -> BigNumber
 somaBN (BigNumber Pos list1) (BigNumber Pos list2) = BigNumber Pos (reverse (sumLists (reverse list1) (reverse list2)))
 somaBN (BigNumber Neg list1) (BigNumber Neg list2) = BigNumber Neg (reverse (sumLists (reverse list1) (reverse list2)))
@@ -75,7 +79,10 @@ somaBN (BigNumber Pos list1) (BigNumber Neg list2)  | biggerAbsList  list1 list2
 somaBN (BigNumber Neg list1) (BigNumber Pos list2)  | biggerAbsList  list1 list2 = BigNumber Neg (reverse (subLists (reverse list1) (reverse list2)))
                                                     | otherwise = BigNumber Pos (reverse (subLists (reverse list2) (reverse list1)))
 
---O número maior vem necessariamente primeiro
+
+--Calcula a subtração da segunda lista à primeira. 
+--As listas representa números inteiros não negativos.
+--O número maior vem necessariamente primeiro.
 subLists :: [Int] -> [Int] -> [Int]
 subLists [] []  = []
 subLists [x] [] = [x]
@@ -89,6 +96,8 @@ subLists (x:xs) (y:ys)  | x < y && (length xs > length ys) = sub : subLists (hea
                         where sub   | x >= y = x - y
                                     | otherwise = (10+x) - y
 
+--Calcula a subtração do segundo BigNumber ao primeiro. 
+--Para isso, transforma a subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
 subBN :: BigNumber -> BigNumber -> BigNumber
 subBN bg (BigNumber sign list)  | sign == Neg = somaBN bg (BigNumber Pos list)
                                 | otherwise = somaBN bg (BigNumber Neg list)

@@ -57,6 +57,10 @@ Esta função soma as listas dos digitos de dois BigNumber e funciona para núme
 
 Esta função recebe duas listas de digitos e subtrai a segunda lista de digitos à primeira. Esta função assume que ambos o valores são positivos e que a primeira lista representa um valor maior que a segunda.
 
+### biggerAbsList
+
+As listas representa números inteiros não negativos. A função retorna True se o primeiro número for maior que o segundo e False no caso contrário.
+
 ## subBN
 
 Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
