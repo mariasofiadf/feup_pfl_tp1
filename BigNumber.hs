@@ -3,8 +3,7 @@ module BigNumber (BigNumber(..), Sign(..), scanner, output, somaBN, subBN) where
 import Data.Char
 import Text.Html (yellow)
 
-data BigNumber = BigNumber Sign [Int] deriving Show
-
+data BigNumber = BigNumber Sign [Int] deriving (Show,Eq)
 
 data Sign = Pos | Neg deriving (Show,Eq)
 
@@ -15,15 +14,13 @@ scanner ['0'] = BigNumber (charToSign '0') (stringToList "0")
 scanner ('0':xs) = scanner xs
 scanner (x:xs) = BigNumber (charToSign x) (stringToList (x:xs))
 
-
-
---for scanner
+--usada no scanner
 charToSign :: Char -> Sign
 charToSign s    | s == '-' = Neg
                 | isDigit s  = Pos
                 | otherwise = error"Invalid input in function charToSign"
 
---for scanner
+--usada no scanner
 stringToList :: String -> [Int]
 stringToList "" = []
 stringToList [x]    | isDigit x = [digitToInt x]
@@ -33,6 +30,7 @@ stringToList (x:xs) =  stringToList [x] ++ stringToList xs
 
 
 output :: BigNumber -> String
+output (BigNumber _ [0]) = "0"
 output (BigNumber sign list) = signToString sign ++ listToString list
 
 signToString :: Sign -> String
@@ -84,7 +82,7 @@ subLists x []   = x
 subLists [] y  = y
 subLists [x] [y] = [abs (x-y)]
 subLists (x:xs) (y:ys)  | x < y && (length xs > length ys) = sub : subLists (head xs - 1 : tail xs) ys
-                        | x < y = sub : subLists xs (head ys - 1 : tail ys)
+                        | x < y = sub : subLists xs (head ys + 1 : tail ys)
                         | otherwise = sub : subLists xs ys
                         where sub   | x >= y = x - y
                                     | otherwise = (10+x) - y
