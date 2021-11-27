@@ -36,7 +36,7 @@ output (BigNumber sign list) = signToString sign ++ listToString list
 signToString :: Sign -> String
 signToString s  | s == Pos = ""
                 | s == Neg = "-"
-                | otherwise = error"error";
+                | otherwise = error"signToString error";
 
 listToString :: [Int] -> String
 listToString = foldr (\ x -> (++) [intToDigit x]) ""
@@ -60,6 +60,8 @@ sumLists (x:xs) (y:ys)  | sum >= 10 && (length xs > length ys) = sum`mod`10 : su
 --igual
 biggerAbsList:: [Int] -> [Int] -> Bool
 biggerAbsList [][] = False
+biggerAbsList [] _ = False
+biggerAbsList _ [] = False
 biggerAbsList (x:xs) (y:ys) | length (x:xs) > length (y:ys) = True
                             | length (x:xs)  < length (y:ys) = False
                             | otherwise = if x /= y then x > y
@@ -73,7 +75,7 @@ somaBN (BigNumber Pos list1) (BigNumber Neg list2)  | biggerAbsList  list1 list2
 somaBN (BigNumber Neg list1) (BigNumber Pos list2)  | biggerAbsList  list1 list2 = BigNumber Neg (reverse (subLists (reverse list1) (reverse list2)))
                                                     | otherwise = BigNumber Pos (reverse (subLists (reverse list2) (reverse list1)))
 
---longest list comes first
+--O número maior vem necessariamente primeiro
 subLists :: [Int] -> [Int] -> [Int]
 subLists [] []  = []
 subLists [x] [] = [x]

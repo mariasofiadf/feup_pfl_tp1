@@ -1,6 +1,7 @@
 module Fib (fibRec, fibLista, fibListaInfinita) where
 import BigNumber
 
+
 --1.1 função recursiva para obter o número de Fibonacci de ordem n
 fibRec:: (Integral a) => a -> a
 fibRec 0 = 0
