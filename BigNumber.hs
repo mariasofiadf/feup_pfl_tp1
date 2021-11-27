@@ -135,29 +135,33 @@ divList::[Int] -> [Int] -> Int -> [Int]
 divList l1 [0] n = []
 divList [] l2 n = []
 divList l1 l2 n | biggerAbsList l2 l1 = []
-                | quo >= 1 || n /= 0 = quo : divList nextDiv l2 (n+1)
+                | (quo >= 1 || n /= 0) && (length conc > 1)  = quo : divList nextDiv l2 (n+1)
                 | otherwise  = quo1 : divList nextDiv1 l2 (n+1)
                         where div = removeLzero(take (length l2) l1)
                               div1 = removeLzero(take (length l2 + 1) l1)
                               quo = divSmallList div l2 1
                               quo1 = divSmallList div1 l2 1
-                              nextDiv = removeLzero (reverse (subLists (reverse div) ( mulList (reverse l2) [quo])) ++ drop (length l2) l1)
-                              nextDiv1 = removeLzero (reverse (subLists (reverse div1) ( mulList (reverse l2) [quo1])) ++ drop (length l2 +1) l1)
-
+                              nextDiv =  removeLzero(reverse (subLists (reverse div) ( mulList (reverse l2) [quo])) ++ drop (length l2) l1)
+                              nextDiv1 =  removeLzero(reverse (subLists (reverse div1) ( mulList (reverse l2) [quo1])) ++ drop (length l2 +1) l1)
+                              conc = drop (length l2) l1
 
 
 
 l11:: [Int]
-l11 = [4,5,0,0]
+l11 = [4,2,4,8]
 
 l22:: [Int]                        
-l22 = [4,4]
+l22 = [2,5]
+
+l111:: [Int]
+l111 = [1,0,0]
+
 
 l3:: [Int]
-l3 = [5,4,8]
+l3 = [3,7,5,0,0]
 
 l4:: [Int]                        
-l4 = [5,6]
+l4 = [1,0]
 
 --subList::[Int] -> [Int] -> [Int]
 --subList (x:xs) (y:ys) = []
