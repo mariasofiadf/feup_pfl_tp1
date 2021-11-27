@@ -59,4 +59,4 @@ Esta função recebe duas listas de digitos e subtrai a segunda lista de digitos
 
 ## subBN
 
-Esta função transforma uma subtração numa soma e chama a função somaBN.
+Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
