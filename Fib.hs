@@ -7,6 +7,7 @@ fibRec n = fibRec(n-1) + fibRec(n-2)
 
 fibs :: (Integral a) => [a]
 fibs = [0,1] ++ zipWith (+) fibs (tail fibs)
+
 --1.2
 fibLista :: (Integral a) => a -> a
 fibLista n = fibs !! fromIntegral n

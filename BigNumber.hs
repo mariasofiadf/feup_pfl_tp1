@@ -91,7 +91,7 @@ subLists x []   = x
 subLists [] y  = y
 subLists [x] [y] = [abs (x-y)]
 subLists (x:xs) (y:ys)  | x < y && (length xs > length ys) = sub : subLists (head xs - 1 : tail xs) ys
-                        | x < y = sub : subLists xs (head ys - 1 : tail ys)
+                        | x < y = sub : subLists xs (head ys + 1 : tail ys)
                         | otherwise = sub : subLists xs ys
                         where sub   | x >= y = x - y
                                     | otherwise = (10+x) - y
@@ -130,15 +130,36 @@ divSmallList:: [Int] -> [Int] -> Int -> Int
 divSmallList list1 list2 n | biggerAbsList( reverse(mulList( reverse list2) [n])) list1 = n - 1
                       | otherwise = divSmallList list1 list2 (n+1)
 
-divList::[Int] -> [Int] -> [Int]
-divList l1 l2 | biggerAbsList l2 l1 = []
-              | otherwise = quo : divList div2 l2 
-                        where div1 = take (length l2) l1
-                              quo = divSmallList div1 l2 1
-                              div2 = reverse (subLists (reverse div1) ( (mulList (reverse l2) [quo]))) ++ drop (length l2) l1
-                              
+
+divList::[Int] -> [Int] -> Int -> [Int]
+divList l1 [0] n = []
+divList [] l2 n = []
+divList l1 l2 n | biggerAbsList l2 l1 = []
+                | quo >= 1 || n /= 0 = quo : divList nextDiv l2 (n+1)
+                | otherwise  = quo1 : divList nextDiv1 l2 (n+1)
+                        where div = removeLzero(take (length l2) l1)
+                              div1 = removeLzero(take (length l2 + 1) l1)
+                              quo = divSmallList div l2 1
+                              quo1 = divSmallList div1 l2 1
+                              nextDiv = removeLzero (reverse (subLists (reverse div) ( mulList (reverse l2) [quo])) ++ drop (length l2) l1)
+                              nextDiv1 = removeLzero (reverse (subLists (reverse div1) ( mulList (reverse l2) [quo1])) ++ drop (length l2 +1) l1)
 
 
 
 
+l11:: [Int]
+l11 = [4,5,0,0]
 
+l22:: [Int]                        
+l22 = [4,4]
+
+l3:: [Int]
+l3 = [5,4,8]
+
+l4:: [Int]                        
+l4 = [5,6]
+
+--subList::[Int] -> [Int] -> [Int]
+--subList (x:xs) (y:ys) = []
+
+--
