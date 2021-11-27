@@ -145,22 +145,18 @@ divList l1 l2 | biggerAbsList l2 l1 = []
                               nextDiv1 =  removeLzero(reverse (subLists (reverse div1) ( mulList (reverse l2) [quo1])) ++ drop (length l2 +1) l1)
 
 
-
-l11:: [Int]
-l11 = [4,2,4,8]
-
-l22:: [Int]
-l22 = [2,5]
-
-l111:: [Int]
-l111 = [1,0,0]
+divBN:: BigNumber -> BigNumber -> (BigNumber , BigNumber)
+divBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  (BigNumber sign result , BigNumber Pos (removeLzero remainder))
+                                                      where result = divList list1 list2
+                                                            remainder = reverse (subLists (reverse list1) (mulList (reverse result) (reverse list2)))
+                                                            sign | sign1 == sign2 = Pos
+                                                                 |otherwise = Neg
 
 
-l3:: [Int]
-l3 = [1,0,5]
 
-l4:: [Int]
-l4 = [1,0]
+
+
+
 
 --subList::[Int] -> [Int] -> [Int]
 --subList (x:xs) (y:ys) = []
