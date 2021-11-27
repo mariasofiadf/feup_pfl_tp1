@@ -155,21 +155,17 @@ divList l1 l2 | biggerAbsList l2 l1 = []
                               nextDiv =  removeLzero(reverse (subLists (reverse div) ( mulList (reverse l2) [quo])) ++ drop (length l2) l1)
                               nextDiv1 =  removeLzero(reverse (subLists (reverse div1) ( mulList (reverse l2) [quo1])) ++ drop (length l2 +1) l1)
 
-
+--BigNumber division
 divBN:: BigNumber -> BigNumber -> (BigNumber , BigNumber)
 divBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  (BigNumber sign result , BigNumber Pos (removeLzero remainder))
                                                       where result = divList list1 list2
                                                             remainder = reverse (subLists (reverse list1) (mulList (reverse result) (reverse list2)))
                                                             sign | sign1 == sign2 = Pos
                                                                  |otherwise = Neg
+--Prevents division by zero
+safeDivBN:: BigNumber -> BigNumber -> Maybe (BigNumber, BigNumber)
+safeDivBN bn1 (BigNumber sign2 list2)
+      | removeLzero list2 /= [] = Just (divBN bn1 (BigNumber sign2 list2)) --divisor not 0, so it uses normal BN division
+      |otherwise = Nothing 
 
 
-
-
-
-
-
---subList::[Int] -> [Int] -> [Int]
---subList (x:xs) (y:ys) = []
-
---
