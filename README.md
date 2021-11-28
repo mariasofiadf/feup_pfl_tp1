@@ -12,13 +12,15 @@ Para testar o correto funcionamento das nossas funções realizamos unit testing
     Cases: 34  Tried: 34  Errors: 0  Failures: 0
     Counts {cases = 34, tried = 34, errors = 0, failures = 0}
 
-# Explicação do funcionamento das funções
 
-## fibRec
+
+# Pergunta 1
+
+## 1.1 fibRec
 
 Esta função calcula o número de Fibonacci de ordem i, recursivamente.
 
-## fibLista
+## 1.2 fibLista
 
 Esta função calcula o número de Fibonacci de ordem i, utilizando uma lista de resultados parciais (função fibs).
 
@@ -26,62 +28,71 @@ Esta função calcula o número de Fibonacci de ordem i, utilizando uma lista de
 
 Esta função retorna uma lista tal que lista !! i contém o número de Fibonacci de ordem i.
 
-## fibListaInfinita
+## 1.3 fibListaInfinita
 
 Esta função calcula o número de Fibonacci de ordem i, gerando uma lista infinita com os números de Fibonacci e retorna o elemento de ordem i.
 
-## scanner
+# 2.1 Definição de BigNumber
 
+Para a definição de BigNumber é utilizado um tipo de dados novo, Sign, que é Pos ou Neg, que nos permite saber se o BigNumber é positivo ou negativo. Um BigNumber tem também a lista dos seus dígitos, [Int], pelo que a sua declaração é a seguinte:
+
+`data BigNumber = BigNumber Sign [Int] deriving (Show,Eq)`<br />
+`data Sign = Pos | Neg deriving (Show,Eq)`
+
+Para que seja possível comparar BigNumbers, tanto Sign como BigNumber derivam de Eq, e para podermos observar os seus valores, ambos derivam de show.
+
+# 2.2 Scanner
+
+## [scanner] - String para BigNumber
 Esta função recebe uma string e retorna um BigNumber. A string de input é analisada de dois modos distintos:
 1. Analisa o primeiro caracter para ver se é um sinal negativo '-' ou se é um digito. No caso de ser '-', o BigNumber terá Sign = Neg e no caso de ser um dígito o BigNumber terá Sign = Pos. Para isto utilizamos uma função auxiliar charToSign.
 2. Analisa a string como um todo, ignorando o caracter '-', no caso de existir e guarda o valor absoluto do número na lista do BigNumber. Para tal, utilizamos uma função auxiliar stringToList.
 Depois de obtermos o Sign e a lista de dígitos podemos retornar o BigNumber desejado.
 
-### charToSign
+## [charToSign]
 
 Transforma char em Sign. Se o char for '-' é retornado Neg e se o char for um digito, é retornado Pos. Se o char não for '-' nem um digito, é retornado erro. 
 
-### stringToList
+## [stringToList]
 
 Transforma string em [Int]. Se o primeiro caracter for '-', é ignorado. Caso contrário, e se não for um digito, é lançado o erro. Esta função percorre recursivamente a string enquanto o char atual for um dígito. Chegando ao fim, é retornada a lista dos dígitos do valor absoluto número de input.
 
-## output
+# 2.3 Output - BigNumber para String
 
+## [output] 
 Esta função recebe um BigNumber e retorna uma string.
 Para o fazer, utiliza duas funções auxiliar, signToString e listToString, e concatena os seus resultados.
 
-### signToString
+## [signToString]
 
 Esta função recebe Sign e, no caso de ser Pos retorna "" e no caso de ser Neg retorna "-".
 
-### listToString
+## [listToString]
 
 Esta função recebe uma lista de inteiros menores que 10 (dígitos) e junta-os numa string. 
 
+# 2.4 Soma
 
-## somaBN
+## [sumLists] Soma de listas
+
+Esta função soma as listas dos dígitos de dois BigNumber e funciona para números positivos. Para tal, recebe as listas em ordem inversa.
+A função é recursiva e vai somando os elementos "head" de cada lista e, se necessário, adiciona o overflow ao elemento seguinte e continua a somar até cada lista ter apenas um elemento cada (caso base da recursividade), caso onde é calculada a soma dos elementos e, caso necessário, é adicionado o overflow ao resultado.
+
+## [somaBN] Soma de BigNumbers
 
 Esta função recebe dois BigNumber e retorna a sua soma em BigNumber. No caso de dois números positivos ou dois números negativos, chama a função auxiliar sumLists. No caso de números de sinais diferentes, é chamada a função auxiliar subLists.
 
-### sumLists
+# 2.5 Subtração
 
-Esta função soma as listas dos digitos de dois BigNumber e funciona para números positivos. Para tal, recebe as listas em ordem inversa.
+## [subLists] Subtração de listas
 
-### subLists
+Esta função recebe duas listas de dígitos e subtrai a segunda lista de dígitos à primeira. Esta função assume que ambos o valores são positivos e que a primeira lista representa um valor maior que a segunda.
+A função é recursiva e vai subtraindo os elementos "head" de cada lista e, se necessário, modifica elemento seguinte conformo o overflow e continua a subtrair até cada lista ter apenas um elemento cada (caso base da recursividade), caso onde é calculada a subtração dos elementos.
 
-Esta função recebe duas listas de digitos e subtrai a segunda lista de digitos à primeira. Esta função assume que ambos o valores são positivos e que a primeira lista representa um valor maior que a segunda.
-
-### biggerAbsList
-
-As listas representa números inteiros não negativos. A função retorna True se o primeiro número for maior que o segundo e False no caso contrário.
-
-### removeLeftZeros
-
-Remove zeros à esquerda, mas se o número for 0, este é mantido.
-
-## subBN
+## [subBN] Subtração de BigNumbers
 
 Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
+
 
 # 2.6 Multiplicação
 
@@ -131,6 +142,25 @@ Recebe o divisor, dividendo e quociente e retorna o resto.
 
 Para o cálculo final é chamada a função divList e calculado o sinal do resultado da mesma forma que na divisão
 O resto é calculado com a função calcReminder.
+
+
+# Funções auxiliares 
+## [biggerAbsList]
+
+As listas representa números inteiros não negativos. A função retorna True se o primeiro número for maior que o segundo e False no caso contrário.
+
+## [removeLeftZeros]
+
+Remove zeros à esquerda, mas se o número for 0, este é mantido.
+
+Exemplos
+- [0,0,7] -> [7] 
+- [0,0,0] -> [0] 
+
+
+## [equalList]
+
+Retorna 'True' se duas listas tiverem o mesmo valor.
 
 # Resposta à pergunta 3
 
