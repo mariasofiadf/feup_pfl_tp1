@@ -123,10 +123,14 @@ De seguida, calcula-se o resto desta primeira divisão, e este resto passa a ser
 
 O cálculo vai ser feito de forma recursiva, e a função acaba quando o dividendo for menor que o divisor.
 
+## [calcReminder] Cálculo do resto
+
+Recebe o divisor, dividendo e quociente e retorna o resto.
+
 ## [divBN] Divisão com BigNumbers
 
-
-
+Para o cálculo final é chamada a função divList e calculado o sinal do resultado da mesma forma que na divisão
+O resto é calculado com a função calcReminder.
 
 # Resposta à pergunta 3
 
