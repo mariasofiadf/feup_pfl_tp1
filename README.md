@@ -57,9 +57,9 @@ Transforma char em Sign. Se o char for '-' é retornado Neg e se o char for um d
 
 Transforma string em [Int]. Se o primeiro caracter for '-', é ignorado. Caso contrário, e se não for um digito, é lançado o erro. Esta função percorre recursivamente a string enquanto o char atual for um dígito. Chegando ao fim, é retornada a lista dos dígitos do valor absoluto número de input.
 
-# 2.3 Output - BigNumber para String
+# 2.3 Output 
 
-## [output] 
+## [output] - BigNumber para String
 Esta função recebe um BigNumber e retorna uma string.
 Para o fazer, utiliza duas funções auxiliar, signToString e listToString, e concatena os seus resultados.
 
