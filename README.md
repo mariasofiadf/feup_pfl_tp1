@@ -2,7 +2,7 @@
 
 Para testar o correto funcionamento das nossas funções realizamos unit testing utilizando o módulo Test.HUnit. Estes unit tests encontram-se nos ficheiros FibTest.hs e BigNumberTest.hs. Ambos têm uma função runAllTests que corre todos os testes e mostra os resultados. Nota: Estes testes apenas correm em linux.
 
-    ghci FibTest.hs 
+    ghci FibTest.hs // ghci BigNumberTest.hs
     *Main> runAllTests 
     Cases: 24  Tried: 24  Errors: 0  Failures: 0
     Counts {cases = 24, tried = 24, errors = 0, failures = 0}
@@ -16,6 +16,10 @@ Esta função calcula o número de Fibonacci de ordem i, recursivamente.
 ## fibLista
 
 Esta função calcula o número de Fibonacci de ordem i, utilizando uma lista de resultados parciais (função fibs).
+
+### fibs
+
+Esta função retorna uma lista tal que lista !! i contém o número de Fibonacci de ordem i.
 
 ## fibListaInfinita
 
@@ -66,9 +70,29 @@ Esta função recebe duas listas de digitos e subtrai a segunda lista de digitos
 
 As listas representa números inteiros não negativos. A função retorna True se o primeiro número for maior que o segundo e False no caso contrário.
 
+### removeLeftZeros
+
+Remove zeros à esquerda, mas se o número for 0, este é mantido.
+
 ## subBN
 
 Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
+
+## fibRecBN
+
+Esta função calcula o número de Fibonacci de ordem i, recursivamente e à semelhança de fibRec, usando as funções somaBN e subBN.
+
+## fibListaBN
+
+Esta função calcula o número de Fibonacci de ordem i, utilizando uma lista de resultados parciais (função fibsBN).
+
+### fibsBN
+
+Esta função retorna uma lista tal que lista !! i contém o BigNumber de Fibonacci de ordem i. Esta função utiliza zipWith com a função somaBN.
+
+## fibListaInfinitaBN
+
+Esta função calcula o número de Fibonacci de ordem i, gerando uma lista infinita com os números de Fibonacci e retorna o elemento de ordem i. A lista infinita é gerada usando zipWith com a função somaBN
 
 # Resposta à pergunta 4
 
