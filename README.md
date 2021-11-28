@@ -64,3 +64,10 @@ As listas representa números inteiros não negativos. A função retorna True s
 ## subBN
 
 Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
+
+## mulBN
+
+### mulList
+
+### mulLA
+

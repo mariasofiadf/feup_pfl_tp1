@@ -1,6 +1,10 @@
 module BigNumber (BigNumber(..), Sign(..), scanner, output, somaBN, subBN) where
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
+{-# OPTIONS_GHC -Wno-deferred-out-of-scope-variables #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char
 import Text.Html (yellow)
 
@@ -166,6 +170,70 @@ divBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  (BigNumber sign result 
 safeDivBN:: BigNumber -> BigNumber -> Maybe (BigNumber, BigNumber)
 safeDivBN bn1 (BigNumber sign2 list2)
       | removeLzero list2 /= [] = Just (divBN bn1 (BigNumber sign2 list2)) --divisor not 0, so it uses normal BN division
-      |otherwise = Nothing 
+      |otherwise = Nothing
 
 
+
+
+
+
+--Returns true if two lists have the same value
+equalList:: [Int] -> [Int] -> Bool
+equalList l1 l2 = removeLzero l1 == removeLzero l2
+
+--Basically subtracting until the divisor is smaller than the dividend
+--It's not the fastest way, and will only be used to help in the division
+divSmallList1:: [Int] -> [Int] -> [Int] -> [Int]
+divSmallList1 list1 list2 n  | biggerAbsList( reverse(mulList( reverse list2) n)) list1 = subLists n [1]
+                             | otherwise = divSmallList1 list1 list2 (sumLists n [1])
+
+
+
+--Param: Dividend Divisor
+--Returns the list of squares of the divisor, until it exceeds the dividend
+squareList:: [Int] -> [Int] -> [[Int]]
+squareList l1 l2| biggerAbsList l2 l1 = []
+                 | otherwise = l2 : squareList l1 (reverse (mulList (reverse l2) (reverse l2)))
+
+--Param: Dividend Divisor Quot
+--Returns de reminder of the division
+calcReminder:: [Int] -> [Int] -> [Int] -> [Int]
+calcReminder l1 l2 quo | null (removeLzero(reverse (subLists (reverse l1) (mulList (reverse quo) (reverse l2))))) = [0]
+                        |otherwise = removeLzero(reverse (subLists (reverse l1) (mulList (reverse quo) (reverse l2))))
+
+--
+divSquare:: [Int] -> [[Int]] -> [([Int],[Int])]
+divSquare l1 [] = []
+divSquare l1 l2 = (quo, reminder) : divSquare reminder (init l2)
+            where quo = reverse(divSmallList1 l1 (last l2) [1])
+                  reminder = calcReminder l1 (last l2) quo
+
+one:: [Int]
+one = [1]
+
+l5:: [[Int]]
+l5 = [[3],[9],[8,1]]
+
+l6:: [Int]
+l6 = [1,0,0,0]
+
+l7:: [Int]
+l7 = [3]
+
+l8:: [([Int],[Int])]
+l8 = [([1,2],[2,8]),([3],[1]),([0],[1])]
+
+
+--Param: (List of squares) (list of tuples with quotients and reminders) (divisor)
+--Returns the final divisor
+calcQuo:: [[Int]] -> [([Int],[Int])] -> [Int] -> [Int] -- l5 l8 l7
+calcQuo [] [] _= []
+calcQuo [] _ _ = []
+calcQuo _ [] _ = []
+calcQuo (x:xs) (y:ys) d = reverse(sumLists (divSmallList1 (reverse mult) d one) (reverse(calcQuo xs ys d)))
+                        where mult = mulList (reverse x) (reverse(fst y))
+
+divList1:: [Int] -> [Int] -> [Int]
+divList1 l1 l2 = calcQuo (reverse squares) quoTuple l2 -- 
+            where squares = squareList l1 l2 --l5 = l6 l7 
+                  quoTuple = divSquare l1 squares --l8 = l6 l5
