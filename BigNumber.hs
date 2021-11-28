@@ -74,11 +74,16 @@ biggerAbsList (x:xs) (y:ys) | length (x:xs) > length (y:ys) = True
 somaBN :: BigNumber -> BigNumber -> BigNumber
 somaBN (BigNumber Pos list1) (BigNumber Pos list2) = BigNumber Pos (reverse (sumLists (reverse list1) (reverse list2)))
 somaBN (BigNumber Neg list1) (BigNumber Neg list2) = BigNumber Neg (reverse (sumLists (reverse list1) (reverse list2)))
-somaBN (BigNumber Pos list1) (BigNumber Neg list2)  | biggerAbsList  list1 list2 = BigNumber Pos (reverse (subLists (reverse list1) (reverse list2)))
+somaBN (BigNumber Pos list1) (BigNumber Neg list2)  | biggerAbsList  list1 list2 = BigNumber Pos (removeLeftZeros(reverse (subLists (reverse list1) (reverse list2))))
                                                     | otherwise = BigNumber Neg (reverse (subLists (reverse list2) (reverse list1)))
-somaBN (BigNumber Neg list1) (BigNumber Pos list2)  | biggerAbsList  list1 list2 = BigNumber Neg (reverse (subLists (reverse list1) (reverse list2)))
+somaBN (BigNumber Neg list1) (BigNumber Pos list2)  | biggerAbsList  list1 list2 = BigNumber Neg (removeLeftZeros(reverse (subLists (reverse list1) (reverse list2))))
                                                     | otherwise = BigNumber Pos (reverse (subLists (reverse list2) (reverse list1)))
 
+
+removeLeftZeros :: [Int] -> [Int]
+removeLeftZeros [0] = [0]
+removeLeftZeros (0:xs) = removeLeftZeros xs
+removeLeftZeros xs = xs
 
 --Calcula a subtração da segunda lista à primeira. 
 --As listas representa números inteiros não negativos.
