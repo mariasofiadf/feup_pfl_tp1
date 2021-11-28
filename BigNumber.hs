@@ -170,7 +170,8 @@ calcReminder l1 l2 quo | null (removeLeftZeros(reverse (subLists (reverse l1) (m
 --BigNumber division
 divBN:: BigNumber -> BigNumber -> (BigNumber , BigNumber)
 divBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  (BigNumber sign result , BigNumber Pos (removeLeftZeros remainder))
-                                                      where result = divList list1 list2
+                                                      where result |equalList list1 [0] = [0]
+                                                                   |otherwise = divList list1 list2
                                                             remainder = calcReminder list1 list2 result
                                                             sign | sign1 == sign2 = Pos
                                                                  |otherwise = Neg

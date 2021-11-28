@@ -47,9 +47,9 @@ testsMul= TestList [testMulBN1,testMulBN2,testMulBN3,testMulBN4,testMulBN5,testM
 
 testDivBN1= TestCase (assertEqual "divBN 1000 3" (scanner"333", scanner "1") (divBN (scanner"1000")(scanner"3")))
 testDivBN2= TestCase (assertEqual "divBN 375 -14"  (scanner"-26", scanner "11") (divBN (scanner"375")(scanner"-14")))
-testDivBN3= TestCase (assertEqual "divBN -175 5"  (scanner"-35", scanner "0") (divBN (scanner"-35")(scanner"0")))
-testDivBN4= TestCase (assertEqual "safeDivBN -100 -3"  (Just (scanner"33", scanner "1")) (safeDivBN (scanner"33")(scanner"1")))
-testDivBN5= TestCase (assertEqual "safeDivBN 15 0"  Nothing (safeDivBN (scanner"33")(scanner"1")))
+testDivBN3= TestCase (assertEqual "divBN -175 5"  (scanner"-35", scanner "0") (divBN (scanner"-175")(scanner"5")))
+testDivBN4= TestCase (assertEqual "safeDivBN -100 -3"  (Just (scanner"33", scanner "1")) (safeDivBN (scanner"-100")(scanner"-3")))
+testDivBN5= TestCase (assertEqual "safeDivBN 15 0"  Nothing (safeDivBN (scanner"15")(scanner"0")))
 testDivBN6= TestCase (assertEqual "divBN 0 5"  (scanner"0", scanner "0")(divBN (scanner"0")(scanner"5")))
 
 testsDiv= TestList [testDivBN1,testDivBN2,testDivBN3,testDivBN4,testDivBN5,testDivBN6]
