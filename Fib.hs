@@ -43,3 +43,5 @@ fibListaBN bn = fibsBN !! read (output bn)
 --3 função recursiva para obter o número de Fibonacci de ordem n
 fibListaInfinitaBN :: BigNumber -> BigNumber
 fibListaInfinitaBN bn = list !! read (output bn) where list = [scanner"0",scanner"1"] ++ zipWith (somaBN) list (tail list)
+
+main = print(fibRec 31)

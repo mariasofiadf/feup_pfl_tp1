@@ -23,11 +23,11 @@ Esta função recebe uma string e retorna um BigNumber. A string de input é ana
 2. Analisa a string como um todo, ignorando o caracter '-', no caso de existir e guarda o valor absoluto do número na lista do BigNumber. Para tal, utilizamos uma função auxiliar stringToList.
 Depois de obtermos o Sign e a lista de dígitos podemos retornar o BigNumber desejado.
 
-### charToSign (usada em scanner)
+### charToSign
 
 Transforma char em Sign. Se o char for '-' é retornado Neg e se o char for um digito, é retornado Pos. Se o char não for '-' nem um digito, é retornado erro. 
 
-### stringToList (usada em scanner)
+### stringToList
 
 Transforma string em [Int]. Se o primeiro caracter for '-', é ignorado. Caso contrário, e se não for um digito, é lançado o erro. Esta função percorre recursivamente a string enquanto o char atual for um dígito. Chegando ao fim, é retornada a lista dos dígitos do valor absoluto número de input.
 
@@ -64,3 +64,5 @@ As listas representa números inteiros não negativos. A função retorna True s
 ## subBN
 
 Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
+
+# Resposta à pergunta 4

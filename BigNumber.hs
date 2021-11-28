@@ -1,7 +1,7 @@
 module BigNumber (BigNumber(..), Sign(..), scanner, output, somaBN, subBN) where
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char
-import Text.Html (yellow)
+--import Text.Html (yellow)
 
 data BigNumber = BigNumber Sign [Int] deriving (Show,Eq)
 
