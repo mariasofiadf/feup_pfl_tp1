@@ -1,12 +1,9 @@
 
-module BigNumber (BigNumber(..), Sign(..), scanner, output, somaBN, subBN) where
+module BigNumber (BigNumber(..), Sign(..), scanner, output, somaBN, subBN, mulBN, divBN, safeDivBN) where
 {-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 import Data.Char
-import Text.Html (yellow)
+--import Text.Html (yellow)
 
-import Data.Char (digitToInt, intToDigit)
-import Test.QuickCheck (Result(output))
-import Data.Graph.Inductive (out)
 
 
 
@@ -82,11 +79,16 @@ biggerAbsList (x:xs) (y:ys) | length (x:xs) > length (y:ys) = True
 somaBN :: BigNumber -> BigNumber -> BigNumber
 somaBN (BigNumber Pos list1) (BigNumber Pos list2) = BigNumber Pos (reverse (sumLists (reverse list1) (reverse list2)))
 somaBN (BigNumber Neg list1) (BigNumber Neg list2) = BigNumber Neg (reverse (sumLists (reverse list1) (reverse list2)))
-somaBN (BigNumber Pos list1) (BigNumber Neg list2)  | biggerAbsList  list1 list2 = BigNumber Pos (reverse (subLists (reverse list1) (reverse list2)))
+somaBN (BigNumber Pos list1) (BigNumber Neg list2)  | biggerAbsList  list1 list2 = BigNumber Pos (removeLeftZeros(reverse (subLists (reverse list1) (reverse list2))))
                                                     | otherwise = BigNumber Neg (reverse (subLists (reverse list2) (reverse list1)))
-somaBN (BigNumber Neg list1) (BigNumber Pos list2)  | biggerAbsList  list1 list2 = BigNumber Neg (reverse (subLists (reverse list1) (reverse list2)))
+somaBN (BigNumber Neg list1) (BigNumber Pos list2)  | biggerAbsList  list1 list2 = BigNumber Neg (removeLeftZeros(reverse (subLists (reverse list1) (reverse list2))))
                                                     | otherwise = BigNumber Pos (reverse (subLists (reverse list2) (reverse list1)))
 
+
+removeLeftZeros :: [Int] -> [Int]
+removeLeftZeros [0] = [0]
+removeLeftZeros (0:xs) = removeLeftZeros xs
+removeLeftZeros xs = xs
 
 --Calcula a subtração da segunda lista à primeira. 
 --As listas representa números inteiros não negativos.
@@ -126,16 +128,54 @@ mulList xs [] = []
 mulList [] ys = []
 mulList xs (y:ys) = sumLists (multLA xs y 0) (0: mulList xs ys)
 
-<<<<<<< HEAD
---2.3 
 
-outputBN :: (Show a) => [a] -> String
-outputBN [] = ""
-outputBN [x] = (show x)
-outputBN (x:xs) = (show x) ++ outputBN xs
-=======
 mulBN:: BigNumber -> BigNumber -> BigNumber
-mulBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  BigNumber sign (reverse (mulList (reverse list1) (reverse list2)))
+mulBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  BigNumber sign (removeLeftZeros(reverse (mulList (reverse list1) (reverse list2))))
                                                         where sign | sign1 == sign2 = Pos
                                                                    |otherwise = Neg
->>>>>>> fd4925d5e06f25d36135a2ad83a5c5c99a67104b
+
+
+
+--Returns true if two lists have the same value
+equalList:: [Int] -> [Int] -> Bool
+equalList l1 l2 = removeLeftZeros l1 == removeLeftZeros l2
+
+--Basically subtracting until the divisor is smaller than the dividend
+--It's not the fastest way, and will only be used to help in the division
+divSmallList:: [Int] -> [Int] -> [Int] -> [Int]
+divSmallList l1 l2 n  |equalList l1 [0] = n
+                        |biggerAbsList l2 l1 = n
+                        |otherwise = divSmallList sub l2 cont where sub = removeLeftZeros(reverse (subLists (reverse l1)(reverse l2)))
+                                                                    cont = removeLeftZeros(reverse (sumLists (reverse n) [1]))
+--Divides two lists 
+divList::[Int] -> [Int]-> [Int]
+divList l1 [0] = []
+divList [] l2 = []
+divList l1 l2 | biggerAbsList l2 l1 = []
+                | biggerAbsList quo [1] || equalList quo [1] = quo ++ divList nextDiv l2 --quo maior ou igual a 1
+                | otherwise  = quo1 ++ divList nextDiv1 l2
+                        where div = removeLeftZeros(take (length l2) l1)
+                              div1 = removeLeftZeros(take (length l2 + 1) l1)
+                              quo = divSmallList div l2 [0]
+                              quo1 = divSmallList div1 l2 [0]
+                              nextDiv =  removeLeftZeros(reverse (subLists (reverse div) ( mulList (reverse l2) quo)) ++ drop (length l2) l1)
+                              nextDiv1 =  removeLeftZeros(reverse (subLists (reverse div1) ( mulList (reverse l2) quo1)) ++ drop (length l2 +1) l1)
+
+--Param: Dividend Divisor Quot
+--Returns de reminder of the division
+calcReminder:: [Int] -> [Int] -> [Int] -> [Int]
+calcReminder l1 l2 quo | null (removeLeftZeros(reverse (subLists (reverse l1) (mulList (reverse quo) (reverse l2))))) = [0]
+                        |otherwise = removeLeftZeros(reverse (subLists (reverse l1) (mulList (reverse quo) (reverse l2))))
+
+--BigNumber division
+divBN:: BigNumber -> BigNumber -> (BigNumber , BigNumber)
+divBN (BigNumber sign1 list1) (BigNumber sign2 list2) =  (BigNumber sign result , BigNumber Pos (removeLeftZeros remainder))
+                                                      where result = divList list1 list2
+                                                            remainder = calcReminder list1 list2 result
+                                                            sign | sign1 == sign2 = Pos
+                                                                 |otherwise = Neg
+--Prevents division by zero
+safeDivBN:: BigNumber -> BigNumber -> Maybe (BigNumber, BigNumber)
+safeDivBN bn1 (BigNumber sign2 list2)
+      | equalList list2 [0] =  Nothing --divisor not 0, so it uses normal BN division
+      |otherwise = Just (divBN bn1 (BigNumber sign2 list2))
