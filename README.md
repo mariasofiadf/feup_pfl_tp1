@@ -2,10 +2,15 @@
 
 Para testar o correto funcionamento das nossas funções realizamos unit testing utilizando o módulo Test.HUnit. Estes unit tests encontram-se nos ficheiros FibTest.hs e BigNumberTest.hs. Ambos têm uma função runAllTests que corre todos os testes e mostra os resultados. Nota: Estes testes apenas correm em linux.
 
-    ghci FibTest.hs // ghci BigNumberTest.hs
+    ghci FibTest.hs
     *Main> runAllTests 
     Cases: 24  Tried: 24  Errors: 0  Failures: 0
     Counts {cases = 24, tried = 24, errors = 0, failures = 0}
+
+    ghci BigNumberTest.hs
+    *BigNumberTests> runAllTests
+    Cases: 34  Tried: 34  Errors: 0  Failures: 0
+    Counts {cases = 34, tried = 34, errors = 0, failures = 0}
 
 # Explicação do funcionamento das funções
 
@@ -78,6 +83,53 @@ Remove zeros à esquerda, mas se o número for 0, este é mantido.
 
 Esta função transforma uma subtração numa soma, alterando o sinal do segundo BigNumber e chama a função somaBN.
 
+# 2.6 Multiplicação
+
+## [mulLA] Multiplicação entre uma lista e um algarismo
+
+Recebe uma lista de inteiros, um inteiro menor que 10 e outro inteiro que representa o overflow da multiplicação.
+A função é recursiva, e só para quando o primeiro algumento for uma lista vazia.
+
+## [mulList] Multiplicação de duas listas
+
+Recebe duas listas de inteiros e retorna o resultado da multiplicação destas duas listas também numa lista de inteiros.
+
+A estratégia usada é semelhante ao algoritmo que se aprende na primária.
+Recursivamente, vamos somar os resultados da multiplicação do primeiro valor, lista xs, com cada algarismo do segundo valor.
+
+
+## [mulBN] Multiplicação com BigNumbers
+
+Para o cálculo final será apenas necessário chamar a função mulList e calcular o sinal do resultado, que será positivo se os sinais forem iguais e negativo se forem diferentes.
+
+# 2.7 Divisão
+
+## [divSmallList] Divisão com subtrações repetitivas
+
+Esta função recebe o divisor e dividendo, e, recursivamente, vai subtrair ao dividendo o divisor até que o primeiro seja maior que o segundo.
+A cada chamada recursiva, incrementamos o terceiro argumento, que serve como contador, e, no final, será igual ao quociente
+
+É importante referir que esta função é pouco eficiente, e é apenas utilizada como auxiliar da função principal
+
+## [divList] Divisão de duas listas
+
+A estratégia da divisão é baseada no seguinte esquema: 
+
+![image info](div.png)
+
+Começa-se por utilizar uma lista com os primeiros algarismos do dividendo. Esta lista terá que ser maior que o divisor. Para fazer esta verificação é utilizada a função divSmallList, que retorna o nosso primeiro quociente.
+
+De seguida, calcula-se o resto desta primeira divisão, e este resto passa a ser o nosso próximo dividendo.
+
+O cálculo vai ser feito de forma recursiva, e a função acaba quando o dividendo for menor que o divisor.
+
+## [divBN] Divisão com BigNumbers
+
+
+
+
+# Resposta à pergunta 3
+
 ## fibRecBN
 
 Esta função calcula o número de Fibonacci de ordem i, recursivamente e à semelhança de fibRec, usando as funções somaBN e subBN.
@@ -132,3 +184,10 @@ Podemos fazer a mesma análise quando usamos BigNumber's. O cálculo usando a fu
     *Fib> fibListaInfinitaBN (scanner"10000")
     ...
     (40.28 secs, 8,028,041,896 bytes)
+
+# Resposta à pergunta 5
+
+## safeDivBN
+
+Esta função previne as divisões por zero.
+Assim,compara a lista do divisor com uma lista com um 0, utilizando a função equalList, e, caso se verifique que é igual a zero, retorna 'Nothing'. Caso contrário, realiza a divisão normalmente, chamando a dunção divBN.
