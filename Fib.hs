@@ -1,4 +1,4 @@
-module Fib (fibRec, fibLista, fibListaInfinita) where
+module Fib (fibRec, fibLista, fibListaInfinita, fibRecBN, fibListaBN, fibListaInfinitaBN ) where
 import BigNumber
 
 

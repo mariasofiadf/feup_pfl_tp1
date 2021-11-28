@@ -2,6 +2,11 @@
 
 Para testar o correto funcionamento das nossas funções realizamos unit testing utilizando o módulo Test.HUnit. Estes unit tests encontram-se nos ficheiros FibTest.hs e BigNumberTest.hs. Ambos têm uma função runAllTests que corre todos os testes e mostra os resultados. Nota: Estes testes apenas correm em linux.
 
+    ghci FibTest.hs 
+    *Main> runAllTests 
+    Cases: 24  Tried: 24  Errors: 0  Failures: 0
+    Counts {cases = 24, tried = 24, errors = 0, failures = 0}
+
 # Explicação do funcionamento das funções
 
 ## fibRec
